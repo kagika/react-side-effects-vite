@@ -1,8 +1,22 @@
-import { useState, useEffect } from 'react'
 import JokeDisplay from './components/JokeDisplay'
 import FetchButton from './components/FetchButton'
-
+import { fetchData } from '../fetchJoke'
+import { useEffect,useState } from 'react'
 function App() {
+  const [loading, setLoading] = useState(true)
+  const [joke, setJoke] = useState("")
+  const getJoke = ()=>{
+    fetchData().then(data=>{
+      setJoke(data.joke)
+      setLoading(false)
+    })
+  }
+  useEffect(()=>{
+    getJoke()        
+  }
+    
+    
+  ,[])
   // Step 1: Create state variables for `joke` and `loading`
 
   // Step 2: Use `useEffect` to call a function that fetches a joke when the component mounts
@@ -18,9 +32,9 @@ function App() {
     <div className="app">
       <h1>Programming Jokes</h1>
       {/* Step 4: Pass the necessary props to JokeDisplay */}
-      <JokeDisplay />
+      <JokeDisplay joke = {joke} loading = {loading} />
       {/* Step 5: Pass the function to FetchButton so it can fetch a new joke on click */}
-      <FetchButton />
+      <FetchButton getJoke = {getJoke}/>
     </div>
   )
 }
